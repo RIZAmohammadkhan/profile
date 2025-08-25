@@ -1,12 +1,12 @@
 :root {
   /* ✅ NEW: "Manila" Theme Color Palette */
-  --bg: #090909;                  /* Cool-toned dark charcoal (VS Code/Gnome inspired) */
+  --bg: #111111;                  /* Cool-toned dark charcoal (VS Code/Gnome inspired) */
   --text-main: #909296;           /* Soft, readable off-white */
-  --text-headings: #fff8e7b5;       /* "Manila" - warm, saturated yellow-beige */
+  --text-headings: #e7dbc2a1;       /* "Manila" - warm, saturated yellow-beige */
   --text-muted: #909296;          /* Muted grey for metadata, descriptions */
   --border-color: rgba(144, 146, 150, 0.2); /* Subtle, cool-toned border */
   --code-bg: #2C2E33;             /* Slightly lighter charcoal for code blocks */
-  --highlight-bg: #0a0a0a;        /* Background for hovered list items */
+  --highlight-bg: #101010;        /* Background for hovered list items */
   
   /* ✅ NEW: Global Variables for Consistency */
   --global-radius: 8px;
