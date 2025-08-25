@@ -437,13 +437,14 @@ footer {
 
 /* ✅ NEW: Media query for responsiveness on small screens */
 @media (max-width: 680px) {
-  .article-header {
-    /* Stack the items vertically */
-    flex-direction: column;
-    /* Align items to the start (left) */
-    align-items: flex-start;
-    gap: 20px; /* Adjust gap for vertical stacking */
-  }
+.article-header {
+flex-direction: column;
+align-items: flex-start;
+gap: 20px;
+}
+.article-meta {
+align-self: center;
+}
 }
 
 /* ============================================= */
@@ -458,4 +459,38 @@ footer {
   width: 0%; /* Starts at 0% width */
   z-index: 10001; /* Higher than the intro overlay */
   transition: width 0.05s linear; /* A tiny transition for smoothness */
+}
+/* Hide custom cursor on touch devices */
+@media (pointer: coarse) {
+  .cursor {
+    display: none !important;
+  }
+  body {
+    cursor: auto !important;
+  }
+}
+/* Loader spinner for audio buffering */
+.audio-pill .loader {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: none;
+  flex-shrink: 0;
+}
+
+.audio-pill.is-loading .loader {
+  display: block;
+}
+
+.audio-pill.is-loading .icon-wrapper {
+  display: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
