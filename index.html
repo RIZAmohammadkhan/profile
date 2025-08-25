@@ -35,22 +35,34 @@
 
   <div class="cursor" aria-hidden="true"></div>
 
-  <!-- Link to the GLOBAL cursor script -->
+  <!-- Link to the GLOBAL cursor and transition script -->
   <script src="script.js" defer></script>
   
-  <!-- This script is LOCAL and ONLY runs on the homepage for the intro animation -->
+  <!-- ✅ MODIFIED: This script now handles the one-time intro logic -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const overlay = document.getElementById('intro-overlay');
       const container = document.querySelector('.container-homepage');
 
-      setTimeout(() => {
-        overlay.classList.add('hidden');
-      }, 1700);
-
-      setTimeout(() => {
+      // Check if the intro has already been shown in this session
+      if (sessionStorage.getItem('introShown')) {
+        // If it has, hide the overlay immediately
+        overlay.style.display = 'none';
+        // Make the main content visible so it can participate in the global fade-in
         container.classList.add('visible');
-      }, 2200);
+      } else {
+        // This is the first visit of the session, so run the banner animation
+        setTimeout(() => {
+          overlay.classList.add('hidden');
+        }, 1700);
+
+        setTimeout(() => {
+          container.classList.add('visible');
+        }, 2200);
+
+        // IMPORTANT: Set the flag in sessionStorage so it doesn't show again
+        sessionStorage.setItem('introShown', 'true');
+      }
     });
   </script>
 </body>

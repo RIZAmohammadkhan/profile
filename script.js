@@ -1,3 +1,9 @@
+// --- ✅ NEW: Page Load Transition ---
+// This code will run on every page, making it fade in smoothly.
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('fade-in');
+});
+
 // This script handles the custom cursor on ALL pages.
 const cursor = document.querySelector('.cursor');
 
