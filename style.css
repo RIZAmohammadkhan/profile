@@ -160,7 +160,7 @@ p {
   font-weight: 400;
   margin-top: 4px;
   /* ✅ NEW: Apply the muted, non-italic color for consistency */
-  color: rgba(255, 247, 209, 0.8);
+  color: rgba(245, 240, 217, 0.8);
 }
 .resume-btn {
   display: inline-block;
