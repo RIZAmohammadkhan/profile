@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>On Small Systems</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <div class="container">
+    <a href="../" class="back-link">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+      <span>Back to Home</span>
+    </a>
+    
+    <article class="article-content" id="article-content-target"></article>
+
+    <audio id="article-audio" src="./audio.m4a" preload="metadata"></audio>
+
+    <footer>
+      <p>© Riza Mohammad Khan</p>
+    </footer>
+  </div>
+
+  <div class="cursor" aria-hidden="true"></div>
+
+  <!-- ✅ FINAL JAVASCRIPT LOGIC (UPDATED FOR DYNAMIC INSERTION) -->
+  <script src="../script.js" defer></script>
+    <script src="../article.js" defer></script>
+
+</body>
+</html>

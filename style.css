@@ -1,0 +1,267 @@
+:root {
+  --bg: #000;
+  --text: #fff7d1;
+  --accent: #fff6c8; /* beige */
+  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --serif: 'Playfair Display', Georgia, serif;
+    --base-font-size: 1.15rem;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: var(--base-font-size);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.8;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 60px 24px;
+  cursor: none !important;
+}
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* --- INTRO QUOTE OVERLAY STYLES --- */
+#intro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 1.2s ease-in-out, visibility 1.2s ease-in-out;
+}
+#intro-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.quote {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  color: var(--accent);
+  max-width: 500px;
+  text-align: center;
+  padding: 20px;
+  font-weight: 600;
+}
+
+/* --- CURSOR WITH OUTLINE EFFECT --- */
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid transparent;
+  mix-blend-mode: difference;
+  pointer-events: none;
+  transform: translate3d(-50%, -50%, 0);
+  transition: width 420ms ease, height 420ms ease, opacity 400ms ease, background-color 420ms ease, border-color 420ms ease;
+  z-index: 9999;
+  opacity: 0.95;
+}
+.cursor.cursor--hover {
+  width: 40px; height: 40px;
+  opacity: 1;
+  background-color: transparent;
+  border-color: var(--accent);
+}
+
+a, button { cursor: none !important; }
+
+.container { 
+  max-width: 780px; 
+  width: 100%; 
+}
+.container-homepage {
+  opacity: 0;
+  transition: opacity 1.5s ease-in;
+}
+.container-homepage.visible {
+  opacity: 1;
+}
+
+header { margin-bottom: 64px; text-align: center; }
+h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 2.8rem;
+  margin: 0;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+}
+.tagline { color: var(--accent); margin-top: 12px; font-size: 1.15rem; font-weight: 500; }
+.socials { margin-top: 28px; display: flex; justify-content: center; gap: 28px; }
+.socials a { color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; transition: transform 0.4s ease; }
+.socials a:hover { transform: translateY(-2px); }
+.socials svg { width: 26px; height: 26px; }
+
+section { margin-bottom: 56px; padding-bottom: 20px; border-bottom: 1px solid rgba(245,245,220,0.25); text-align: left; }
+section:last-of-type { border-bottom: none; margin-bottom: 40px; }
+
+h2 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 1.9rem;
+  margin-bottom: 20px;
+  color: var(--accent);
+  text-align: center;
+}
+p {
+  margin: 0 0 16px;
+  color: var(--accent);
+  font-weight: 400;
+  text-align: justify;
+}
+
+.list { display: grid; gap: 18px; }
+.list a {
+  position: relative;
+  display: block;
+  padding: 6px 8px 6px 28px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.4s ease;
+}
+
+.list a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 12px; 
+  height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  transform: translateY(-50%);
+  clip-path: circle(0% at center);
+  transition: clip-path 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.list a:hover::before {
+  clip-path: circle(50% at center);
+}
+
+.list strong { font-family: var(--serif); font-size: 1.2rem; font-weight: 700; margin-right: 6px; }
+.meta { font-size: 0.95rem; font-weight: 400; opacity: 0.95; }
+.desc { display: block; font-size: 1rem; font-weight: 400; margin-top: 4px; }
+
+.resume-btn {
+  display: inline-block;
+  margin-top: 28px;
+  padding: 14px 22px;
+  border: 2px solid var(--accent);
+  border-radius: 8px;
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  transition: background 0.4s ease, color 0.4s ease, transform 0.4s ease;
+}
+.resume-btn:hover { background: var(--accent); color: var(--bg); transform: translateY(-2px); }
+
+/* === ARTICLE PAGE: BACK LINK === */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 40px;
+  font-weight: 500;
+  transition: opacity 0.3s ease;
+}
+/* Ensure the link has the correct color and no underline, even when visited */
+.back-link,
+.back-link:visited {
+  color: var(--accent);
+  text-decoration: none;
+}
+.back-link:hover {
+  opacity: 0.8;
+}
+
+footer {
+  font-size: 0.9rem;
+  color: var(--accent);
+  margin-top: 60px;
+  padding-top: 40px;
+  font-weight: 400;
+  text-align: center;
+  border-top: 1px solid rgba(245,245,220,0.25);
+}
+
+/* ============================================= */
+/* === AUDIO PLAYER STYLES (FINAL)           === */
+/* ============================================= */
+.article-meta {
+  text-align: center;
+  margin: 24px 0 32px;
+}
+
+.audio-pill {
+  display: inline-block;
+  background: transparent;
+  border: 1px solid rgba(255, 247, 209, 0.4);
+  border-radius: 25px;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.4s ease;
+  color: var(--accent);
+}
+
+/* ... other audio-pill styles are correct ... */
+.audio-pill:hover,
+.audio-pill.is-playing {
+  border-color: var(--accent);
+}
+.progress-fill {
+  position: absolute; top: 0; left: 0; height: 100%;
+  width: 0%; background: var(--accent); z-index: 1;
+  transition: width 0.1s linear;
+}
+.audio-pill.is-dragging .progress-fill { transition: none; }
+.content-wrapper {
+  position: relative; z-index: 2; display: flex;
+  align-items: center; justify-content: center; gap: 10px;
+  padding: 8px 18px; font-family: var(--sans);
+  font-size: 0.95rem; font-weight: 500;
+  mix-blend-mode: difference;
+}
+
+/* ✅ NEW RULE TO FIX BUTTON JIGGLE */
+.pill-text {
+  /* This forces all numbers (0-9) to have the same width */
+  font-variant-numeric: tabular-nums;
+  /* Provides a stable minimum width to prevent collapsing */
+  min-width: 6em; 
+}
+
+.icon-wrapper { position: relative; width: 16px; height: 16px; flex-shrink: 0; }
+.audio-pill svg {
+  position: absolute; top: 50%; left: 50%;
+  width: 16px; height: 16px; fill: currentColor;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.icon-play { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.icon-pause { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+.audio-pill.is-playing .icon-play { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+.audio-pill.is-playing .icon-pause { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+/* The cursor grabbing style is also correct */
+.cursor.cursor--grabbing {
+  transform: scale(1.4); /* Simplified for clarity */
+  opacity: 0.8;
+}
