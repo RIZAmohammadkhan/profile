@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return response.text();
     })
     .then(rawText => {
-        // ✅ --- Step 2: Parse front matter and separate content ---
+        // --- Step 2: Parse front matter and separate content ---
         const frontMatterRegex = /^---\s*([\s\S]*?)\s*---\s*/;
         const match = rawText.match(frontMatterRegex);
         
@@ -41,16 +41,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const tempContainer = document.createElement('div');
         tempContainer.innerHTML = rawHTML;
 
-        // --- Step 4: Find the first heading and insert the new elements ---
+        // --- Step 4: Restructure the header for the inline layout ---
         const firstHeading = tempContainer.querySelector('h1');
         if (firstHeading) {
-            // Create the subtitle HTML (only if a description exists)
-            const subtitleHTML = description ? `<p class="article-subtitle">${description}</p>` : '';
+            // 1. Create the new flex wrapper element
+            const headerWrapper = document.createElement('div');
+            headerWrapper.className = 'article-header';
+
+            // 2. Insert the new wrapper into the DOM, right before the original h1
+            firstHeading.parentNode.insertBefore(headerWrapper, firstHeading);
             
-            // Insert both the subtitle and the audio button right after the h1
-            firstHeading.insertAdjacentHTML('afterend', subtitleHTML + audioButtonHTML);
+            // 3. Move the h1 *inside* the new wrapper
+            headerWrapper.appendChild(firstHeading);
+            
+            // 4. Add the audio button HTML to the end of the wrapper
+            headerWrapper.insertAdjacentHTML('beforeend', audioButtonHTML);
+
+            // 5. Create and insert the subtitle (if it exists) *after* the entire header wrapper
+            if (description) {
+                const subtitleHTML = `<p class="article-subtitle">${description}</p>`;
+                headerWrapper.insertAdjacentHTML('afterend', subtitleHTML);
+            }
         } else {
-            // Fallback: If no h1, add the button at the top (subtitle doesn't make sense here)
+            // Fallback: If no h1 is found, add the button at the very top
             tempContainer.insertAdjacentHTML('afterbegin', audioButtonHTML);
         }
 
@@ -59,10 +72,10 @@ document.addEventListener('DOMContentLoaded', () => {
             articleContent.innerHTML = tempContainer.innerHTML;
         }
         
-        // --- Step 6: Apply syntax highlighting ---
+        // --- Step 6: Apply syntax highlighting to the new code blocks ---
         hljs.highlightAll();
         
-        // --- Step 7: Initialize the audio player ---
+        // --- Step 7: Initialize the audio player now that the button exists ---
         initializeAudioPlayer();
     })
     .catch(error => {
@@ -74,12 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     function initializeAudioPlayer() {
-        // [ This entire function remains unchanged ]
-        // ...
         const audio = document.getElementById('article-audio');
         const pill = document.getElementById('audio-pill');
+        const customCursor = document.querySelector('.cursor');
         if (!audio || !pill) return;
-        // ... the rest of the audio player logic is the same
+
         const progressFill = pill.querySelector('.progress-fill');
         const pillText = pill.querySelector('.pill-text');
         let didMove = false;
@@ -88,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let formattedDuration = '0:00';
         let isCurrentlyDragging = false;
         let originalPlayState = false;
+
         const formatTime = (seconds) => {
             if (isNaN(seconds) || !isFinite(seconds)) return '0:00';
             const minutes = Math.floor(seconds / 60);
@@ -156,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const stopDrag = () => {
             isCurrentlyDragging = false;
             pill.classList.remove('is-dragging');
-            if (document.querySelector('.cursor')) document.querySelector('.cursor').classList.remove('cursor--grabbing');
+            if (customCursor) customCursor.classList.remove('cursor--grabbing');
             cleanupEventListeners();
             if (!didMove) { 
             activatePlayer();
@@ -181,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
             audio.pause();
             }
             pill.classList.add('is-dragging');
-            if (document.querySelector('.cursor')) document.querySelector('.cursor').classList.add('cursor--grabbing');
+            if (customCursor) customCursor.classList.add('cursor--grabbing');
             cleanupEventListeners();
             window.addEventListener('pointermove', handleDrag, { passive: false });
             window.addEventListener('pointerup', stopDrag);

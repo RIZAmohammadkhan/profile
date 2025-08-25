@@ -382,3 +382,49 @@ footer {
   margin: 0.25em 0 1.25em;
   font-style: italic;
 }
+/* ============================================= */
+/* === ARTICLE CONTENT & MARKDOWN STYLES     === */
+/* ============================================= */
+
+/* ✅ NEW: Flex container for the H1 and audio button */
+.article-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px; /* Provides space between title and button */
+  flex-wrap: wrap; /* Allows wrapping on smaller screens */
+  margin-bottom: 0.5em; /* Space between header and subtitle */
+}
+
+/* ✅ MODIFIED: Remove margin from H1 when it's inside the new header */
+.article-header h1 {
+  margin: 0;
+}
+
+/* ✅ MODIFIED: Remove margin from the audio player container */
+.article-meta {
+  margin: 0;
+  flex-shrink: 0; /* Prevents the button from shrinking if the title is long */
+}
+
+/* ✅ MODIFIED: Adjust subtitle margin to fit the new layout */
+.article-subtitle {
+  font-family: var(--sans);
+  font-size: 1.25rem;
+  color: rgba(255, 247, 209, 0.8);
+  text-align: center;
+  /* Reduced top margin */
+  margin: 0.5em 0 2em; 
+  font-style: italic;
+}
+
+/* ✅ NEW: Media query for responsiveness on small screens */
+@media (max-width: 680px) {
+  .article-header {
+    /* Stack the items vertically */
+    flex-direction: column;
+    /* Align items to the start (left) */
+    align-items: flex-start;
+    gap: 20px; /* Adjust gap for vertical stacking */
+  }
+}
