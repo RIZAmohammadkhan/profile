@@ -7,6 +7,22 @@
     --base-font-size: 1.15rem;
 }
 * { box-sizing: border-box; }
+
+/* ✅ MODIFIED: Target both html and body for consistent scrollbar hiding */
+html,
+body {
+  /* Hide the native scrollbar for Firefox */
+  scrollbar-width: none;
+  /* Hide the native scrollbar for older IE/Edge */
+  -ms-overflow-style: none;
+}
+
+/* ✅ MODIFIED: Hide the native scrollbar for Chrome, Safari, and Opera on both elements */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -24,6 +40,7 @@ body {
   opacity: 0;
   transition: opacity 0.6s ease-in-out;
 }
+
 body.fade-in {
   opacity: 1;
 }
@@ -427,4 +444,18 @@ footer {
     align-items: flex-start;
     gap: 20px; /* Adjust gap for vertical stacking */
   }
+}
+
+/* ============================================= */
+/* === SCROLL PROGRESS BAR STYLES            === */
+/* ============================================= */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--accent);
+  width: 0%; /* Starts at 0% width */
+  z-index: 10001; /* Higher than the intro overlay */
+  transition: width 0.05s linear; /* A tiny transition for smoothness */
 }

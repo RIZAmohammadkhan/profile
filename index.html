@@ -4,11 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Riza Mohammad Khan</title>
+  <!-- ✅ NEW: Favicon Link -->
+  <link rel="icon" type="image/png" href="favicon.png">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <div class="scroll-progress-bar"></div>
 
   <div id="intro-overlay">
     <p class="quote">Clarity, simplicity, and good design.</p>
@@ -38,20 +42,17 @@
   <!-- Link to the GLOBAL cursor and transition script -->
   <script src="script.js" defer></script>
   
-  <!-- ✅ MODIFIED: This script now handles the one-time intro logic -->
+  <!-- ✅ MODIFIED: This script now handles the one-time intro logic AND the scrollbar -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // --- INTRO LOGIC ---
       const overlay = document.getElementById('intro-overlay');
       const container = document.querySelector('.container-homepage');
 
-      // Check if the intro has already been shown in this session
       if (sessionStorage.getItem('introShown')) {
-        // If it has, hide the overlay immediately
         overlay.style.display = 'none';
-        // Make the main content visible so it can participate in the global fade-in
         container.classList.add('visible');
       } else {
-        // This is the first visit of the session, so run the banner animation
         setTimeout(() => {
           overlay.classList.add('hidden');
         }, 1700);
@@ -60,8 +61,26 @@
           container.classList.add('visible');
         }, 2200);
 
-        // IMPORTANT: Set the flag in sessionStorage so it doesn't show again
         sessionStorage.setItem('introShown', 'true');
+      }
+
+      // --- SCROLL PROGRESS BAR LOGIC ---
+      const progressBar = document.querySelector('.scroll-progress-bar');
+      if (progressBar) {
+        const updateProgressBar = () => {
+          const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+          if (scrollableHeight <= 0) {
+            progressBar.style.width = '0%';
+            return;
+          }
+          const scrollTop = window.scrollY;
+          const scrollPercent = (scrollTop / scrollableHeight) * 100;
+          progressBar.style.width = `${scrollPercent}%`;
+        };
+        
+        window.addEventListener('scroll', updateProgressBar, { passive: true });
+        window.addEventListener('resize', updateProgressBar, { passive: true });
+        updateProgressBar(); // Initial call
       }
     });
   </script>

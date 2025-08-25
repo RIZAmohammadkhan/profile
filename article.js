@@ -77,6 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // --- Step 7: Initialize the audio player now that the button exists ---
         initializeAudioPlayer();
+
+        // --- Step 8: Initialize the scroll progress bar ---
+        initializeScrollProgressBar();
     })
     .catch(error => {
         console.error('Error fetching or rendering markdown:', error);
@@ -203,5 +206,39 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         pill.addEventListener('pointerdown', startDrag);
         pill.addEventListener('touchstart', startDrag, { passive: false });
+    }
+
+    // --- Function to handle the scroll progress bar ---
+    function initializeScrollProgressBar() {
+        const progressBar = document.querySelector('.scroll-progress-bar');
+        if (!progressBar) return;
+
+        const updateProgressBar = () => {
+            // The total scrollable height of the page
+            const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+            
+            // Avoid division by zero if content is not scrollable
+            if (scrollableHeight <= 0) {
+                progressBar.style.width = '0%';
+                return;
+            }
+
+            // How far down the user has scrolled
+            const scrollTop = window.scrollY;
+
+            // Calculate the percentage scrolled
+            const scrollPercent = (scrollTop / scrollableHeight) * 100;
+
+            progressBar.style.width = `${scrollPercent}%`;
+        };
+
+        // Listen for scroll events
+        window.addEventListener('scroll', updateProgressBar, { passive: true });
+        
+        // Also update on resize in case the window dimensions change
+        window.addEventListener('resize', updateProgressBar, { passive: true });
+
+        // Initial call to set the bar correctly on page load/reload
+        updateProgressBar();
     }
 });
