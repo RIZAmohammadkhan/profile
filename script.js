@@ -6,11 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // This script handles the custom cursor on ALL pages.
 const cursor = document.querySelector('.cursor');
-// ✅ NEW: Check if the primary input method is a fine pointer (like a mouse)
-const isFinePointer = window.matchMedia('(pointer: fine)').matches;
 
-// ✅ MODIFIED: Only run cursor logic if the element exists AND it's a fine pointer device
-if (cursor && isFinePointer) {
+if (cursor) {
   let mouseX = window.innerWidth / 2;
   let mouseY = window.innerHeight / 2;
   let posX = mouseX;

@@ -459,19 +459,3 @@ footer {
   z-index: 10001; /* Higher than the intro overlay */
   transition: width 0.05s linear; /* A tiny transition for smoothness */
 }
-
-/* ============================================= */
-/* === ✅ NEW: TOUCH DEVICE WORKAROUND        === */
-/* ============================================= */
-/* This media query targets devices that either cannot hover or have a coarse pointer (like a finger). */
-@media (hover: none) or (pointer: coarse) {
-  /* Hide our custom cursor element completely */
-  .cursor {
-    display: none !important;
-  }
-
-  /* Restore the default system cursor on the body and all interactive elements */
-  body, a, button {
-    cursor: auto !important;
-  }
-}
