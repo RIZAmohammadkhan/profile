@@ -1,3 +1,6 @@
+---
+description: Notes on building tiny tools that last.
+---
 # Python
 ---
 

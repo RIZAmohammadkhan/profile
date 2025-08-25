@@ -16,159 +16,179 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch('article.md')
     .then(response => {
         if (!response.ok) {
-        throw new Error(`Network response was not ok: ${response.statusText}`);
+            throw new Error(`Network response was not ok: ${response.statusText}`);
         }
         return response.text();
     })
-    .then(markdownText => {
-        // --- Step 2: Parse markdown and prepare for DOM manipulation ---
-        const rawHTML = marked.parse(markdownText);
+    .then(rawText => {
+        // ✅ --- Step 2: Parse front matter and separate content ---
+        const frontMatterRegex = /^---\s*([\s\S]*?)\s*---\s*/;
+        const match = rawText.match(frontMatterRegex);
+        
+        let description = '';
+        const markdownContent = match ? rawText.replace(frontMatterRegex, '').trim() : rawText;
+
+        if (match) {
+            const frontMatter = match[1];
+            const descMatch = frontMatter.match(/^description:\s*(.*)$/m);
+            if (descMatch) {
+                description = descMatch[1].trim();
+            }
+        }
+
+        // --- Step 3: Parse markdown and prepare for DOM manipulation ---
+        const rawHTML = marked.parse(markdownContent);
         const tempContainer = document.createElement('div');
         tempContainer.innerHTML = rawHTML;
 
-        // --- Step 3: Find the first heading and insert the button ---
+        // --- Step 4: Find the first heading and insert the new elements ---
         const firstHeading = tempContainer.querySelector('h1');
         if (firstHeading) {
-        firstHeading.insertAdjacentHTML('afterend', audioButtonHTML);
+            // Create the subtitle HTML (only if a description exists)
+            const subtitleHTML = description ? `<p class="article-subtitle">${description}</p>` : '';
+            
+            // Insert both the subtitle and the audio button right after the h1
+            firstHeading.insertAdjacentHTML('afterend', subtitleHTML + audioButtonHTML);
         } else {
-        tempContainer.insertAdjacentHTML('afterbegin', audioButtonHTML);
+            // Fallback: If no h1, add the button at the top (subtitle doesn't make sense here)
+            tempContainer.insertAdjacentHTML('afterbegin', audioButtonHTML);
         }
 
-        // --- Step 4: Inject the final, combined HTML into the page ---
+        // --- Step 5: Inject the final, combined HTML into the page ---
         if (articleContent) {
-        articleContent.innerHTML = tempContainer.innerHTML;
+            articleContent.innerHTML = tempContainer.innerHTML;
         }
         
-        // ✅ --- Step 5: Apply syntax highlighting to the new code blocks ---
+        // --- Step 6: Apply syntax highlighting ---
         hljs.highlightAll();
         
-        // --- Step 6: Initialize the audio player now that the button exists ---
+        // --- Step 7: Initialize the audio player ---
         initializeAudioPlayer();
     })
     .catch(error => {
         console.error('Error fetching or rendering markdown:', error);
         if (articleContent) {
-        articleContent.innerHTML = '<p style="color: #f88;">Error: Could not load article content.</p>';
+            articleContent.innerHTML = '<p style="color: #f88;">Error: Could not load article content.</p>';
         }
     });
 
 
     function initializeAudioPlayer() {
-      // --- THIS AUDIO PLAYER LOGIC IS THE SAME AS BEFORE ---
-      // [ No changes needed here ]
-      const audio = document.getElementById('article-audio');
-      const pill = document.getElementById('audio-pill');
-      // ... rest of the function is unchanged
-      if (!audio || !pill) return;
-      const progressFill = pill.querySelector('.progress-fill');
-      const pillText = pill.querySelector('.pill-text');
-      let didMove = false;
-      let wasPlayingBeforeDrag = false;
-      let hasBeenActivated = false;
-      let formattedDuration = '0:00';
-      let isCurrentlyDragging = false;
-      let originalPlayState = false;
-      const formatTime = (seconds) => {
-          if (isNaN(seconds) || !isFinite(seconds)) return '0:00';
-          const minutes = Math.floor(seconds / 60);
-          const secs = Math.floor(seconds % 60);
-          return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-      };
-      const updateProgress = (percent) => {
-          progressFill.style.width = `${percent}%`;
-          pill.setAttribute('aria-valuenow', percent.toFixed(0));
-      };
-      const updateTimeDisplay = () => {
-          if (hasBeenActivated) {
-          pillText.textContent = `${formatTime(audio.currentTime)} / ${formattedDuration}`;
-          }
-      };
-      const activatePlayer = () => {
-          if (hasBeenActivated) return;
-          hasBeenActivated = true;
-          if (isFinite(audio.duration)) {
-          formattedDuration = formatTime(audio.duration);
-          }
-          updateTimeDisplay();
-      };
-      audio.addEventListener('loadedmetadata', () => {
-          formattedDuration = formatTime(audio.duration);
-          if (hasBeenActivated) {
-          updateTimeDisplay();
-          }
-      });
-      audio.addEventListener('play', () => pill.classList.add('is-playing'));
-      audio.addEventListener('pause', () => pill.classList.remove('is-playing'));
-      audio.addEventListener('ended', () => {
-          pill.classList.remove('is-playing');
-          updateProgress(0);
-          audio.currentTime = 0;
-      });
-      audio.addEventListener('timeupdate', () => {
-          if (isCurrentlyDragging) return;
-          if (isFinite(audio.duration) && audio.duration > 0) {
-          const percent = (audio.currentTime / audio.duration) * 100;
-          updateProgress(percent);
-          if (hasBeenActivated) {
-              updateTimeDisplay();
-          }
-          }
-      });
-      const handleDrag = (e) => {
-          didMove = true;
-          activatePlayer();
-          if (!isFinite(audio.duration) || audio.duration <= 0) return;
-          const rect = pill.getBoundingClientRect();
-          const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-          let percent = (x / rect.width) * 100;
-          percent = Math.max(0, Math.min(100, percent));
-          updateProgress(percent);
-          const newTime = (percent / 100) * audio.duration;
-          audio.currentTime = newTime;
-          updateTimeDisplay();
-      };
-      const cleanupEventListeners = () => {
-          window.removeEventListener('pointermove', handleDrag);
-          window.removeEventListener('pointerup', stopDrag);
-          window.removeEventListener('touchmove', handleDrag);
-          window.removeEventListener('touchend', stopDrag);
-      };
-      const stopDrag = () => {
-          isCurrentlyDragging = false;
-          pill.classList.remove('is-dragging');
-          if (document.querySelector('.cursor')) document.querySelector('.cursor').classList.remove('cursor--grabbing');
-          cleanupEventListeners();
-          if (!didMove) { 
-          activatePlayer();
-          if (originalPlayState) {
-              audio.pause();
-          } else {
-              audio.play().catch(console.error);
-          }
-          } else { 
-          if (wasPlayingBeforeDrag) {
-              audio.play().catch(console.error);
-          }
-          }
-      };
-      const startDrag = (e) => {
-          e.preventDefault();
-          didMove = false;
-          isCurrentlyDragging = true;
-          originalPlayState = !audio.paused;
-          wasPlayingBeforeDrag = originalPlayState;
-          if (wasPlayingBeforeDrag) {
-          audio.pause();
-          }
-          pill.classList.add('is-dragging');
-          if (document.querySelector('.cursor')) document.querySelector('.cursor').classList.add('cursor--grabbing');
-          cleanupEventListeners();
-          window.addEventListener('pointermove', handleDrag, { passive: false });
-          window.addEventListener('pointerup', stopDrag);
-          window.addEventListener('touchmove', handleDrag, { passive: true });
-          window.addEventListener('touchend', stopDrag);
-      };
-      pill.addEventListener('pointerdown', startDrag);
-      pill.addEventListener('touchstart', startDrag, { passive: false });
+        // [ This entire function remains unchanged ]
+        // ...
+        const audio = document.getElementById('article-audio');
+        const pill = document.getElementById('audio-pill');
+        if (!audio || !pill) return;
+        // ... the rest of the audio player logic is the same
+        const progressFill = pill.querySelector('.progress-fill');
+        const pillText = pill.querySelector('.pill-text');
+        let didMove = false;
+        let wasPlayingBeforeDrag = false;
+        let hasBeenActivated = false;
+        let formattedDuration = '0:00';
+        let isCurrentlyDragging = false;
+        let originalPlayState = false;
+        const formatTime = (seconds) => {
+            if (isNaN(seconds) || !isFinite(seconds)) return '0:00';
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+        };
+        const updateProgress = (percent) => {
+            progressFill.style.width = `${percent}%`;
+            pill.setAttribute('aria-valuenow', percent.toFixed(0));
+        };
+        const updateTimeDisplay = () => {
+            if (hasBeenActivated) {
+            pillText.textContent = `${formatTime(audio.currentTime)} / ${formattedDuration}`;
+            }
+        };
+        const activatePlayer = () => {
+            if (hasBeenActivated) return;
+            hasBeenActivated = true;
+            if (isFinite(audio.duration)) {
+            formattedDuration = formatTime(audio.duration);
+            }
+            updateTimeDisplay();
+        };
+        audio.addEventListener('loadedmetadata', () => {
+            formattedDuration = formatTime(audio.duration);
+            if (hasBeenActivated) {
+            updateTimeDisplay();
+            }
+        });
+        audio.addEventListener('play', () => pill.classList.add('is-playing'));
+        audio.addEventListener('pause', () => pill.classList.remove('is-playing'));
+        audio.addEventListener('ended', () => {
+            pill.classList.remove('is-playing');
+            updateProgress(0);
+            audio.currentTime = 0;
+        });
+        audio.addEventListener('timeupdate', () => {
+            if (isCurrentlyDragging) return;
+            if (isFinite(audio.duration) && audio.duration > 0) {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            updateProgress(percent);
+            if (hasBeenActivated) {
+                updateTimeDisplay();
+            }
+            }
+        });
+        const handleDrag = (e) => {
+            didMove = true;
+            activatePlayer();
+            if (!isFinite(audio.duration) || audio.duration <= 0) return;
+            const rect = pill.getBoundingClientRect();
+            const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+            let percent = (x / rect.width) * 100;
+            percent = Math.max(0, Math.min(100, percent));
+            updateProgress(percent);
+            const newTime = (percent / 100) * audio.duration;
+            audio.currentTime = newTime;
+            updateTimeDisplay();
+        };
+        const cleanupEventListeners = () => {
+            window.removeEventListener('pointermove', handleDrag);
+            window.removeEventListener('pointerup', stopDrag);
+            window.removeEventListener('touchmove', handleDrag);
+            window.removeEventListener('touchend', stopDrag);
+        };
+        const stopDrag = () => {
+            isCurrentlyDragging = false;
+            pill.classList.remove('is-dragging');
+            if (document.querySelector('.cursor')) document.querySelector('.cursor').classList.remove('cursor--grabbing');
+            cleanupEventListeners();
+            if (!didMove) { 
+            activatePlayer();
+            if (originalPlayState) {
+                audio.pause();
+            } else {
+                audio.play().catch(console.error);
+            }
+            } else { 
+            if (wasPlayingBeforeDrag) {
+                audio.play().catch(console.error);
+            }
+            }
+        };
+        const startDrag = (e) => {
+            e.preventDefault();
+            didMove = false;
+            isCurrentlyDragging = true;
+            originalPlayState = !audio.paused;
+            wasPlayingBeforeDrag = originalPlayState;
+            if (wasPlayingBeforeDrag) {
+            audio.pause();
+            }
+            pill.classList.add('is-dragging');
+            if (document.querySelector('.cursor')) document.querySelector('.cursor').classList.add('cursor--grabbing');
+            cleanupEventListeners();
+            window.addEventListener('pointermove', handleDrag, { passive: false });
+            window.addEventListener('pointerup', stopDrag);
+            window.addEventListener('touchmove', handleDrag, { passive: true });
+            window.addEventListener('touchend', stopDrag);
+        };
+        pill.addEventListener('pointerdown', startDrag);
+        pill.addEventListener('touchstart', startDrag, { passive: false });
     }
 });
