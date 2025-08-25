@@ -79,8 +79,8 @@ body.fade-in {
   position: fixed; top: 0; left: 0;
   width: 18px; height: 18px;
   border-radius: 50%;
-  background: var(--text-headings);
-  border: 2px solid transparent;
+  background: transparent; /* MODIFIED: Changed from filled to transparent */
+  border: 2px solid var(--text-headings); /* MODIFIED: Made border visible by default */
   mix-blend-mode: difference;
   pointer-events: none;
   transform: translate3d(-50%, -50%, 0);
@@ -89,7 +89,7 @@ body.fade-in {
   opacity: 0.95;
 }
 .cursor.cursor--hover {
-  width: 40px; height: 40px; opacity: 1;
+  width: 33px; height: 33px; opacity: 1;
   background-color: transparent;
   border-color: var(--text-headings);
 }
