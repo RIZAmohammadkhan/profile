@@ -255,3 +255,110 @@ footer {
   transform: scale(1.4);
   opacity: 0.8;
 }
+/* ============================================= */
+/* === ARTICLE CONTENT & MARKDOWN STYLES     === */
+/* ============================================= */
+.article-content {
+  /* Resets the centered text for the article body */
+  text-align: left;
+}
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4 {
+  font-family: var(--serif);
+  color: var(--accent);
+  margin: 2em 0 1em;
+  font-weight: 700;
+  letter-spacing: normal;
+}
+.article-content h1 { font-size: 2.6rem; text-align: left; }
+.article-content h2 { font-size: 2rem; }
+.article-content h3 { font-size: 1.6rem; }
+.article-content p {
+  margin-bottom: 1.25em;
+  text-align: justify; /* Keeps the clean block-like text format */
+}
+.article-content a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 247, 209, 0.5);
+  transition: text-decoration-color 0.3s ease;
+}
+.article-content a:hover {
+  text-decoration-color: var(--accent);
+}
+.article-content strong {
+  font-weight: 600;
+}
+.article-content ul,
+.article-content ol {
+  padding-left: 28px;
+  margin-bottom: 1.5em;
+}
+.article-content li {
+  margin-bottom: 0.75em;
+}
+
+/* Horizontal Rule */
+.article-content hr {
+  border: 0;
+  height: 1px;
+  background: rgba(245, 245, 220, 0.25);
+  margin: 3.5em 0;
+}
+
+/* Inline Code */
+.article-content :not(pre) > code {
+  background-color: rgba(255, 246, 200, 0.1);
+  padding: 0.2em 0.5em;
+  border-radius: 4px;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.9em;
+}
+
+/* Code Blocks & Syntax Highlighting */
+.article-content pre {
+  background: #111; /* A slightly softer black than the background */
+  border: 1px solid rgba(255, 246, 200, 0.15);
+  border-radius: 8px;
+  padding: 1.25em 1.5em;
+  margin: 2em 0;
+  overflow-x: auto;
+  line-height: 1.6;
+}
+.article-content pre code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.95em;
+  background: none;
+  padding: 0;
+}
+
+/* Tables */
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2em 0;
+}
+.article-content th,
+.article-content td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid rgba(245, 245, 220, 0.25);
+}
+.article-content th {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Blockquotes */
+.article-content blockquote {
+  margin: 2em 0;
+  padding-left: 1.5em;
+  border-left: 3px solid rgba(255, 246, 200, 0.4);
+  font-style: italic;
+  color: rgba(255, 247, 209, 0.85); /* Slightly muted text */
+}
+.article-content blockquote p {
+  text-align: left;
+}
