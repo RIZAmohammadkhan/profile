@@ -159,7 +159,8 @@ p { margin: 0 0 16px; color: var(--text-main); font-weight: 400; text-align: lef
   position: relative;
   overflow: hidden;
   z-index: 1;
-  transition: color 0.45s cubic-bezier(.25,1,.5,1), transform 0.25s ease;
+  /* MODIFIED: Removed the transform from the transition */
+  transition: color 1.0s cubic-bezier(.25,1,.5,1);
   /* initialize CSS vars used by the script */
   --x: 50%;
   --y: 50%;
@@ -179,10 +180,10 @@ p { margin: 0 0 16px; color: var(--text-main); font-weight: 400; text-align: lef
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: -1;
-  /* these transitions create the smooth liquid expansion/contraction */
+  /* MODIFIED: Increased duration for the liquid fill/unfill effect */
   transition:
-    width 0.55s cubic-bezier(.22,1,.36,1),
-    height 0.55s cubic-bezier(.22,1,.36,1),
+    width 1.2s cubic-bezier(.22,1,.36,1),
+    height 1.2s cubic-bezier(.22,1,.36,1),
     left 0.12s linear,
     top 0.12s linear;
 }
@@ -196,13 +197,13 @@ p { margin: 0 0 16px; color: var(--text-main); font-weight: 400; text-align: lef
 /* Text color when filled */
 .resume-btn.is-filled {
   color: var(--bg);
-  transform: translateY(-2px);
+  /* MODIFIED: Removed the transform that made it move up */
 }
 
 /* keep keyboard hover accessible: when focused, also show small effect (not full) */
 .resume-btn:focus-visible {
   outline: 3px solid rgba(231, 219, 194, 0.12);
-  transform: translateY(-2px);
+  /* MODIFIED: Removed the transform that made it move up */
 }
 
 
