@@ -21,11 +21,9 @@ body {
   min-height: 100vh;
   padding: 60px 24px;
   cursor: none !important;
-  /* --- ✅ NEW: Page Transition Base Styles --- */
   opacity: 0;
   transition: opacity 0.6s ease-in-out;
 }
-/* --- ✅ NEW: Class to trigger the fade-in animation --- */
 body.fade-in {
   opacity: 1;
 }
@@ -134,32 +132,23 @@ p {
   text-align: justify;
 }
 
-.list { display: grid; gap: 18px; }
+.list { display: grid; gap: 10px; }
+
 .list a {
-  position: relative;
   display: block;
-  padding: 6px 8px 6px 28px;
+  padding: 8px 12px;
   color: var(--accent);
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.4s ease;
+  border-radius: 6px;
+  /* ✅ MODIFIED: Transition is slower and no longer includes background-color */
+  transition: transform 0.4s ease;
 }
 
-.list a::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 12px; 
-  height: 12px;
-  background: var(--accent);
-  border-radius: 50%;
-  transform: translateY(-50%);
-  clip-path: circle(0% at center);
-  transition: clip-path 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-}
-.list a:hover::before {
-  clip-path: circle(50% at center);
+.list a:hover {
+  /* The "lift up" effect */
+  transform: translateY(-3px);
+  /* ✅ MODIFIED: The background-color property has been removed */
 }
 
 .list strong { font-family: var(--serif); font-size: 1.2rem; font-weight: 700; margin-right: 6px; }
@@ -189,7 +178,6 @@ p {
   font-weight: 500;
   transition: opacity 0.3s ease;
 }
-/* Ensure the link has the correct color and no underline, even when visited */
 .back-link,
 .back-link:visited {
   color: var(--accent);
@@ -229,7 +217,6 @@ footer {
   color: var(--accent);
 }
 
-/* ... other audio-pill styles are correct ... */
 .audio-pill:hover,
 .audio-pill.is-playing {
   border-color: var(--accent);
@@ -248,11 +235,8 @@ footer {
   mix-blend-mode: difference;
 }
 
-/* ✅ NEW RULE TO FIX BUTTON JIGGLE */
 .pill-text {
-  /* This forces all numbers (0-9) to have the same width */
   font-variant-numeric: tabular-nums;
-  /* Provides a stable minimum width to prevent collapsing */
   min-width: 6em; 
 }
 
@@ -267,8 +251,7 @@ footer {
 .audio-pill.is-playing .icon-play { opacity: 0; transform: translate(-50%, -50%) scale(0); }
 .audio-pill.is-playing .icon-pause { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
-/* The cursor grabbing style is also correct */
 .cursor.cursor--grabbing {
-  transform: scale(1.4); /* Simplified for clarity */
+  transform: scale(1.4);
   opacity: 0.8;
 }
